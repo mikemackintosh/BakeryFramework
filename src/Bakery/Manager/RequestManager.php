@@ -119,14 +119,7 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 		try{
 			
 			foreach($this['app']->routes as $route){
-				print_r($route);
-				die();
-				echo $route->getDomain()."<br />";
-				
-				if($route->getDomain() != "" && $route->getDomain() == $this['domain']){
-					echo "matched!";
-				}
-				
+
 				$this['app']['hologram']->setModule("DBG:MGR")->log(\Bakery\Utilities\Hologram::DEBUG, "Checking Route $route->prefix");
 				
 				// If last character is trailing slash, make optional
