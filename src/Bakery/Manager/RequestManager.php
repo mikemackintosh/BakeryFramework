@@ -11,12 +11,12 @@
 
 namespace Bakery\Manager;
 
-use \Bakery\Provider\ArrayAccessProvider;
+use Bakery\Provider\ArrayAccessProvider;
 
-use \Bakery\Application;
-use \Bakery\Route;
-use \Bakery\Interfaces\RequestResponseInterface;
-use \Bakery\Manager\ResponseManager;
+use Bakery\Application;
+use Bakery\Route;
+use Bakery\Interfaces\RequestResponseInterface;
+use Bakery\Manager\ResponseManager;
 
 /**
  * @author Mike Mackintosh <mike@bakeryframework.com>
@@ -29,13 +29,47 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 	 */
 	public function __construct( Application $app ){
 
+		/**
+		 * Store $app locally
+		 */
 		$this['app'] = $app;
 		
+		/**
+		 * HTTP request method
+		 */
 		$this['method'] = strtolower($_SERVER['REQUEST_METHOD']); // GET, PUT, TRACE, POST, DELETE 
+		
+		/**
+		 * Check if HTTPS is set or not
+		 */
 		$this['isSecure'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" ? true : false);
 		
+		/**
+		 * The requested URI
+		 */
 		$this['uri'] = $_SERVER['REQUEST_URI'];
 		
+		/**
+		 * Lets grab the HTTP_HOST and parse it out
+		 */
+		$this['subdomain'] = $tld = "";
+		
+		// If a registered TLD is found, add it to the domain 
+		// @TODO: Needs to be refactored and simplified
+		$_domainParts = preg_split('/\./', strtolower($_SERVER['HTTP_HOST']));
+		if(preg_match('/com|net|org|biz|tv|uk|me|mobi|travel|gov|us/', $_domainParts[sizeof($_domainParts)-1])){
+			$tld = ".".array_pop($_domainParts);
+		}
+		
+		/**
+		 * 
+		 */
+		$this['domain'] = $_domainParts[sizeof($_domainParts)-1].$tld;
+		
+		if(sizeof($_domainParts) > 1){
+			$this['subdomain'] = $_domainParts[sizeof($_domainParts)-2];
+		}
+
 		// If .json ext exists, set json mode to true
 		$this['json'] = (strstr($_SERVER['REQUEST_URI'], ".json") ? true : false);
 		
@@ -47,32 +81,51 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 		$this['hostname'] = $_SERVER['HTTP_HOST'];
 		$this['requestTime'] = $_SERVER['REQUEST_TIME_FLOAT'];
 		
+		/**
+		 * Detect if the HTTP REFERER is set
+		 */
 		$this['referer'] = (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
 		
+		/**
+		 * Accessing host and port
+		 */
 		$this['remoteHost'] = $_SERVER['REMOTE_ADDR'];
 		$this['remotePort'] = $_SERVER['REMOTE_PORT'];
 		
+		/**
+		 * Accessed host and port
+		 */
 		$this['localHost'] = $_SERVER['SERVER_ADDR'];
 		$this['localPort'] = $_SERVER['SERVER_PORT'];
 		
+		/**
+		 * Pointer to $_REQUEST superglobal
+		 */
 		$this['request'] = $_REQUEST;
-		
+				
 		$this['app']['hologram']->setModule("WWW")->log(\Bakery\Utilities\Hologram::DEBUG, "Request Received: {$this['uri']}");
-		
 		
 		return $this;
 		
 	}
 	
 	/**
-	 * @param Application $app
-	 * @return function/class instance or false on error
+	 * Serves the request. Handles the routing request
+	 * 
+	 * @return ResponseManager Instance
 	 */
 	public function response( ){
 		
 		try{
 			
 			foreach($this['app']->routes as $route){
+				print_r($route);
+				die();
+				echo $route->getDomain()."<br />";
+				
+				if($route->getDomain() != "" && $route->getDomain() == $this['domain']){
+					echo "matched!";
+				}
 				
 				$this['app']['hologram']->setModule("DBG:MGR")->log(\Bakery\Utilities\Hologram::DEBUG, "Checking Route $route->prefix");
 				

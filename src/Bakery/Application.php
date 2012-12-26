@@ -2,16 +2,16 @@
 
 /*
  * This file is part of the Bakery framework.
- *
- * (c) Mike Mackintosh <mike@bakeryframework.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+*
+* (c) Mike Mackintosh <mike@bakeryframework.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
 namespace Bakery;
 
-use \Bakery\Provider\ArrayAccessProvider;
+use Bakery\Provider\ArrayAccessProvider;
 use \Closure as Closure;
 use \Bakery\Route;
 use \Bakery\Manager\RequestManager;
@@ -44,8 +44,6 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		
 		$this['error'] = $this['request_error'];
 		
-		$this['request.http_port'] = 80;
-		$this['request.https_port'] = 443;
 		$this['debug'] = false;
 		$this['charset'] = 'UTF-8';
 		$this['locale'] = 'en';
@@ -173,9 +171,6 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 	 * 
 	 */
 	public function run(){
-				
-		// map request to routes
-		//$this->Log("Accessed ". __METHOD__);
 		
 		$this['hologram']->setModule("CORE")->log(\Bakery\Utilities\Hologram::DEBUG, "Baking Request");
 		
@@ -196,7 +191,7 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		// map request to routes
 		//$this->Log("Accessed ". __METHOD__);
 	
-		$this['hologram']->setModule("CORE")->log(\Bakery\Utilities\Hologram::DEBUG, "Baking Command Line Request");
+		$this['hologram']->setModule("CORE")->log(\Bakery\Utilities\Hologram::DEBUG, "Baking Request");
 	
 		$this['request'] = new CLIRequestManager( $this );
 	

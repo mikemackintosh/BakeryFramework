@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * This file is part of the Bakery framework.
@@ -6,25 +6,21 @@
  * (c) Mike Mackintosh <mike@bakeryframework.com>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code. 
+ * file that was distributed with this source code.
  */
 
 namespace Bakery;
 
 use \Bakery\Interfaces\ControllerProviderInterface;
 
-/**
- * Route
- *
- * @author Mike Mackintosh <mike@bakeryframework.com>
- *
- */
 class Route{
 	
 	public
 		$prefix, 
 		$callback,
-		$_routeName;
+		$_routeName,
+		$_domain,
+		$_subdomain;
 	
 	private
 		$_accessProtocol = array("http", "https"),
@@ -55,24 +51,43 @@ class Route{
 		
 		return $this;
 	}
-	
+
 	public function regex( $variable, $pattern){
 		$this->_uriPattern[$variable] = $pattern;
-		
+	
 		return $this;
 	}
 	
+	public function domain( $variable ){
+		$this->_domain = $variable;
+	
+		return $this;
+	}
+
+	public function subdomain( $variable){
+		$this->_subdomain = $variable;
+	
+		return $this;
+	}	
 	public function bind( $name ){
 		$this->_routeName = $name;
 	}
 	
 	
 	/*
-	 * @TODO: FInish implementing verification methods
+	 * @TODO: Finish implementing verification methods
 	 */
-	
+
 	public function getMethod(){
 		return $this->_accessMethods;
+	}
+
+	public function getDomain(){
+		return $this->_domain;
+	}
+
+	public function getSubdomain(){
+		return $this->_subdomain;
 	}
 
 	public function allowGet(){
