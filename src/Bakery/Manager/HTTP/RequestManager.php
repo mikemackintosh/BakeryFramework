@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Bakery\Manager;
+namespace Bakery\Manager\HTTP;
 
 use Bakery\Provider\ArrayAccessProvider;
 
 use Bakery\Application;
 use Bakery\Route;
 use Bakery\Interfaces\RequestResponseInterface;
-use Bakery\Manager\ResponseManager;
+use Bakery\Manager\HTTP\ResponseManager;
 
 /**
  * @author Mike Mackintosh <mike@bakeryframework.com>

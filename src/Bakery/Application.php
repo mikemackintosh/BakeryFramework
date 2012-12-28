@@ -14,8 +14,8 @@ namespace Bakery;
 use Bakery\Provider\ArrayAccessProvider;
 use \Closure as Closure;
 use \Bakery\Route;
-use \Bakery\Manager\RequestManager;
-use \Bakery\Manager\CLIRequestManager;
+use \Bakery\Manager\HTTP\RequestManager as HTTPRequestManager;
+use \Bakery\Manager\CLI\RequestManager as CLIRequestManager;
 use \Bakery\Interfaces\ControllerProviderInterface;
 use \Bakery\Interfaces\SilexServiceProviderInterface;
 
@@ -133,7 +133,7 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		$app = &$this;
 		
 		// Logout
-		$app->route("{$this['security.logout']['handler']}", function( RequestManager $request ) use ($app){
+		$app->route("{$this['security.logout']['handler']}", function( HTTPRequestManager $request ) use ($app){
 			
 			session_destroy();
 			
@@ -142,7 +142,7 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		});
 		
 		// Login
-		$app->route("{$this['security.login']['handler']}", function( RequestManager $request ) use ($app){
+		$app->route("{$this['security.login']['handler']}", function( HTTPRequestManager $request ) use ($app){
 			return $app['twig']->render('login.twig', array(
       			'login_validator' => $app['security.login']['check_path'],
 				'redirect_to' => (isset($_SESSION['redirect_to']) ? $_SESSION['redirect_to'] : "/"),
@@ -151,7 +151,7 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		});		
 		
 		// Login and validate session
-		$app->route("{$this['security.login']['check_path']}", function( RequestManager $request ) use ($app){
+		$app->route("{$this['security.login']['check_path']}", function( HTTPRequestManager $request ) use ($app){
 			if(($app['security.user']->authenticate())){
 				header("Location: {$_POST['redirect_to']}");
 			}
@@ -174,7 +174,7 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		
 		$this['hologram']->setModule("CORE")->log(\Bakery\Utilities\Hologram::DEBUG, "Baking Request");
 		
-		$this['request'] = new RequestManager( $this );
+		$this['request'] = new HTTPRequestManager( $this );
 		
 		$this['response'] = $this['request']->response( );
 			

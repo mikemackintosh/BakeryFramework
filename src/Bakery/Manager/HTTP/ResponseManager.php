@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Bakery\Manager;
+namespace Bakery\Manager\HTTP;
 
 use \Bakery\Provider\ArrayAccessProvider;
 use \Bakery\Interfaces\RequestResponseInterface;
 
 /**
- * Response Manager handles the output of all requests
+ * Response Manager handles the output of all HTTP requests
  * 
  * @author Mike Mackintosh <mike@bakeryframework.com>
  *
