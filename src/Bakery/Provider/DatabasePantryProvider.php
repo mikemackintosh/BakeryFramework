@@ -1,25 +1,16 @@
 <?php
 
-/*
- * This file is part of the Bakery framework.
- *
- * (c) Mike Mackintosh <mike@bakeryframework.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Bakery\Provider;
 
-use \Bakery\Application;
-use \Bakery\Config;
-use \Bakery\Pantry\Database;
-use \Bakery\Interfaces\DatabaseProviderInterface;
+use Bakery\Application;
+use Bakery\Config;
+use Bakery\Pantry\Database;
+use Bakery\Interfaces\DatabaseProviderInterface;
 
 /**
  * Provider for Database Storage Engine access
  *
- * @author Mike Mackintosh <mike@bakeryframework.com>
+ * @author Mike Mackitnosh <mike.mackintosh@sixeightzero.com>
  */
 class DatabasePantryProvider implements DatabaseProviderInterface{
 	
@@ -102,7 +93,7 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 		$query = "INSERT INTO $table SET ". implode(",", $fields);
 		
 		$stmt = $this->databases['global']->prepare($query);
-		$stmt->execute($values);
+		$this->_last = $stmt->execute($values);
 				
 		return $this->databases['global']->lastInsertId();
 		
@@ -119,7 +110,7 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 		$query = "UPDATE $table SET ". implode(",", $fields)." WHERE $constraint";
 		
 		$stmt = $this->databases['global']->prepare($query);
-		$stmt->execute($values);
+		$this->_last = $stmt->execute($values);
 		
 		return;
 		
@@ -132,11 +123,21 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 	public function executeQuery( $query, $values = array() ){
 	
 		$stmt = $this->databases['global']->prepare($query);
-		$stmt->execute($values);
+		$this->_last = $stmt->execute($values);
 	
 		return;
 	}
 
+	/**
+	 * @param String $query
+	 * @param Array $values
+	 */
+	public function numrows( ){
+	
+		return $this->_last->rowCount();
+		
+	}
+	
 
 	/**
 	 *
@@ -156,7 +157,7 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 		return $this->databases['global']->beginTransaction();
 	
 	}
-	
+
 
 	/**
 	 *
@@ -164,6 +165,15 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 	public function commit(){
 	
 		return $this->databases['global']->commit();
+	
+	}	
+
+	/**
+	 *
+	 */
+	public function rollback(){
+	
+		return $this->databases['global']->rollback();
 	
 	}
 	

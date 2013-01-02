@@ -119,6 +119,8 @@ class Application extends ArrayAccessProvider implements \ArrayAccess{
 		$this['security.login'] = $securityOptions['login'];
 		$this['security.logout'] = $securityOptions['logout'];
 		
+		
+		$this['security.anonymous'] = (array_key_exists("anonymous", $securityOptions) ? $securityOptions['anonymous'] : null);
 		$this['security.require_admin'] = (array_key_exists("admin_protected", $securityOptions) ? $securityOptions['admin_protected'] : null);
 		$this['security.require_user'] = (array_key_exists("user_protected", $securityOptions) ? $securityOptions['user_protected'] : null);
 		$this['security.require_custom'] = (array_key_exists("custom_protected", $securityOptions) ? $securityOptions['custom_protected'] : null);

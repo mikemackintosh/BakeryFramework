@@ -220,8 +220,25 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 		// Make sure this is not the login or login handler
 		if( in_array($route, array( $this['app']['security.login']['handler'], $this['app']['security.login']['check_path'], $this['app']['security.logout']['handler'])) === false){
 			
-			if( is_array($this['app']['security.require_admin'])){
-					foreach( $this['app']['security.require_admin'] as $_adminProtectedPattern ){
+			
+			if( is_array($this['app']['security.anonymous'])){
+				
+				foreach( $this['app']['security.anonymous'] as $_anonymousPattern ){
+				
+					if(preg_match("`$_anonymousPattern`i", $route)){
+				
+						$this->_requires['authentication'] = false;
+						$this->_requires['role'] = "USER";
+						
+						return false;
+						
+					}
+				
+				}				
+				
+			}
+			else if( is_array($this['app']['security.require_admin'])){
+				foreach( $this['app']['security.require_admin'] as $_adminProtectedPattern ){
 						
 					if(preg_match("`$_adminProtectedPattern`i", $route)){
 	
@@ -241,6 +258,9 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 							return self::PERMISSION_DENIED;
 							
 						}
+						
+						return false;
+						
 					
 					}
 						
@@ -268,7 +288,10 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 							
 							return self::PERMISSION_DENIED;
 							
-						}				
+						}
+
+						return false;
+						
 					}
 						
 				}
