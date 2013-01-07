@@ -103,6 +103,22 @@ class DatabasePantryProvider implements DatabaseProviderInterface{
 	 * @param String $table
 	 * @param Array $fields
 	 * @param Array $values
+	 */
+	public function insertDuplicate( $table, $fields, $values, $dup_constraint){
+	
+		$query = "INSERT INTO $table SET ". implode(",", $fields) ." ON DUPLICATE KEY UPDATE ". $dup_constraint;
+	
+		$stmt = $this->databases['global']->prepare($query);
+		$this->_last = $stmt->execute($values);
+	
+		return $this->databases['global']->lastInsertId();
+	
+	}
+	
+	/**
+	 * @param String $table
+	 * @param Array $fields
+	 * @param Array $values
 	 * @param String $constraint
 	 */
 	public function update( $table, $fields, $values, $constraint){
