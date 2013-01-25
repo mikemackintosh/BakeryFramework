@@ -26,7 +26,7 @@ Bakery is a PHP framework designed to be extremely lightweight, flexibly, extens
 
 ##1. Introduction
 
-Bakery was inspired by many years of headache and lack of customization for existing frameworks. Simliar to Silex, BakeryFramework allows you to either define specific route handlers or pass a controller for route management.
+Bakery was inspired by many years of headache and lack of customization for existing frameworks. Similar to Silex, BakeryFramework allows you to either define specific route handlers or pass a controller for route management.
 
 ##2. Requirenments
 
