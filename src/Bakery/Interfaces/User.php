@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Bakery\Manager;
+namespace Bakery\Interfaces;
 
 use \Bakery\Application;
 use \Bakery\Provider\ArrayAccessProvider;
