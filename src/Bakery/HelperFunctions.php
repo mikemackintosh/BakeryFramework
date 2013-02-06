@@ -26,7 +26,7 @@ function b_filter( $type , $this ){
  * filter_numeric_keys removes non-string array keys
  * 
  * @param array $array
- * @return array:
+ * @return array
  */
 function bfilter_numeric_keys( array $array ){
 	foreach($array as $key=>$var){
@@ -40,4 +40,21 @@ function bfilter_numeric_keys( array $array ){
 	}
 	
 	return $array;	
+}
+
+/**
+ * bfilter_create_slug - converts string into slug
+ * 
+ * @param string $slug
+ * @param boolean $hyphenate
+ * @return string
+ */
+function bfilter_create_slug($slug, $hyphenate = true){
+	$slug = strtolower($slug);
+
+	if($hyphenate){
+		$slug = preg_replace("/[-\s\W]/","-",$slug);
+	}
+
+	return preg_replace("/[^a-z0-9-]/", "",strtolower($slug));
 }
