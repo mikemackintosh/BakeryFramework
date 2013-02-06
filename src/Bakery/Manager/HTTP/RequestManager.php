@@ -334,7 +334,19 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 		return (!is_array($_REQUEST[$attr]) ? htmlspecialchars( $_REQUEST[$attr] ) : $_REQUEST[$attr]);
 			
 	}
-
+	
+	public function posted( $attr ){
+	
+		return (array_key_exists($attr, $_POST) ? true : false);
+			
+	}
+	
+	public function gotten( $attr ){
+	
+		return (array_key_exists($attr, $_GET) ? true : false);
+			
+	}
+	
 	public function post( $attr ){
 	
 		return htmlspecialchars( $_POST[$attr] );
