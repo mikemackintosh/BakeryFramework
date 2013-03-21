@@ -17,8 +17,8 @@
  * @return mixed
  */
 function b_filter( $type , $this ){
-	
-	return (new \ReflectionFunction( "bfilter_$type"))->invoke($this);
+	$filter = new \ReflectionFunction( "bfilter_$type");
+	return $filter->invoke($this);
 
 }
 
@@ -50,11 +50,11 @@ function bfilter_numeric_keys( array $array ){
  * @return string
  */
 function bfilter_create_slug($slug, $hyphenate = true){
-	$slug = strtolower($slug);
+	$slug = str_replace(array("'", '"'), "", strtolower($slug));
 
 	if($hyphenate){
 		$slug = preg_replace("/[-\s\W]/","-",$slug);
 	}
 
-	return preg_replace("/[^a-z0-9-]/", "",strtolower($slug));
+	return preg_replace("/[^a-z0-9-_]/", "", $slug);
 }
