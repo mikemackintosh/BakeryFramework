@@ -174,11 +174,12 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 						
 						if($invoker->getParameters()[0]->getName() == 'request'){
 							
-							return $this['instance'] = new ResponseManager($this, (new \ReflectionFunction( $route->callback ))->invokeArgs( array($this) + $matches ));
+							$responseC = new \ReflectionFunction( $route->callback );
+							return $this['instance'] = new ResponseManager($this, $responseC->invokeArgs( array($this) + $matches ));
 						
 						}
 						
-						return $this['instance'] = new ResponseManager($this, (new \ReflectionFunction( $route->callback ))->invokeArgs( $matches ));
+						return $this['instance'] = new ResponseManager($this, ($response->invokeArgs( $matches ));
 												
 					}
 					
@@ -219,25 +220,8 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 		
 		// Make sure this is not the login or login handler
 		if( in_array($route, array( $this['app']['security.login']['handler'], $this['app']['security.login']['check_path'], $this['app']['security.logout']['handler'])) === false){
-			
-			
-			if( is_array($this['app']['security.anonymous'])){
 				
-				foreach( $this['app']['security.anonymous'] as $_anonymousPattern ){
-				
-					if(preg_match("`$_anonymousPattern`i", $route)){
-				
-						$this->_requires['authentication'] = false;
-						$this->_requires['role'] = "USER";
-						
-						return false;
-						
-					}
-				
-				}				
-				
-			}
-			else if( is_array($this['app']['security.require_admin'])){
+			if( is_array($this['app']['security.require_admin'])){
 				foreach( $this['app']['security.require_admin'] as $_adminProtectedPattern ){
 						
 					if(preg_match("`$_adminProtectedPattern`i", $route)){
@@ -296,6 +280,21 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 						
 				}
 				
+			}
+			
+			if( is_array($this['app']['security.anonymous'])){
+			
+				foreach( $this['app']['security.anonymous'] as $_anonymousPattern ){
+					if(preg_match("`$_anonymousPattern`i", $route)){
+			
+						$this->_requires['authentication'] = false;
+			
+						return false;
+			
+					}
+			
+				}
+			
 			}
 			
 		}
