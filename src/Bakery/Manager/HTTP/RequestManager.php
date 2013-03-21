@@ -179,7 +179,7 @@ class RequestManager extends ArrayAccessProvider implements \ArrayAccess,Request
 						
 						}
 						
-						return $this['instance'] = new ResponseManager($this, ($response->invokeArgs( $matches ));
+						return $this['instance'] = new ResponseManager($this, $response->invokeArgs( $matches ));
 												
 					}
 					
